@@ -1,21 +1,48 @@
-const int dx[8] = {-1,-1,-1,0,0,1,1,1};
-const int dy[8] = {-1,0,1,1,-1,-1,0,1};
+#include <iostream>
+using namespace std;
 
-bool hasWord (int x, int y, cons string&word)
+char board[5][5];
+const int dx[8] = { -1,-1,-1,0,0,1,1,1 };
+const int dy[8] = { -1,0,1,1,-1,-1,0,1 };
+
+bool inRange(int x, int y);
+
+bool hasWord(int x, int y, const string& word)
 {
-  if (!inRange(x,y))
+    if (!inRange(x, y))
+        return false;
+    if (board[y][x] != word[0]) return false;
+    if (word.size() == 1) return true;
+    for (int direction = 0; direction < 8; direction++)
+    {
+        int nextY = y + dy[direction];
+        int nextX = x + dy[direction];
+        if (hasWord(nextX, nextY, word.substr(1)))
+            return true;
+    }
     return false;
-  if (board[y][x] != word[0]) return false;
-  
-  
-  //board[y][x] == word[0] 이다!
-  if (word.size() == 1) return true;
-  for (int direction = 0; direction<8; direction++)
-  {
-    int nextY= y+dy[direction];
-    int nextX = x+dy[direction];
-    if (hasWord (nextX, nextY, word.substr(1)))
-      return true;
-  }
-  return false;
+}
+
+bool inRange(int x, int y)
+{
+    if (x < 0 || x>5)
+        return false;
+    if (y < 0 || y>5)
+        return false;
+    return true;
+}
+
+int main(void)
+{
+    board[5][5] = {
+        {'U','R','L','P','M'},
+        {'X','P','R','E','T'},
+        {'G','I','A','E','T'},
+        {'X','T','N','Z','Y'},
+        {'X','O','Q','R','S'}
+    };
+
+    if (hasWord(2, 2, "PRETTY"))
+        printf("true");
+    return 0;
 }
